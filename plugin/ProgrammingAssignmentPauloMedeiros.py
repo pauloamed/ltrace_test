@@ -1,4 +1,5 @@
 import ctk
+import numpy as np
 import vtk
 import logging
 import qt
@@ -24,10 +25,6 @@ class ProgrammingAssignmentPauloMedeiros(ScriptedLoadableModule):
 
 
 class ProgrammingAssignmentPauloMedeirosWidget(ScriptedLoadableModuleWidget):
-    """Uses ScriptedLoadableModuleWidget base class, available at:
-
-    https://github.com/Slicer/Slicer/blob/master/Base/Python/slicer/ScriptedLoadableModule.py
-    """
 
     def setup(self):
         ScriptedLoadableModuleWidget.setup(self)
@@ -140,14 +137,6 @@ class ProgrammingAssignmentPauloMedeirosWidget(ScriptedLoadableModuleWidget):
 
 
 class ProgrammingAssignmentPauloMedeirosLogic(ScriptedLoadableModuleLogic):
-    """This class should implement all the actual computation done by your module.
-
-    The interface should be such that other python code can import
-    this class and make use of the functionality without
-    requiring an instance of the Widget.
-    Uses ScriptedLoadableModuleLogic base class, available at:
-    https://github.com/Slicer/Slicer/blob/master/Base/Python/slicer/ScriptedLoadableModule.py
-    """
 
     def has_image_data(self, volume_node):
         """Checks volume is defined and present image data"""
@@ -263,5 +252,8 @@ class ProgrammingAssignmentPauloMedeirosTest(ScriptedLoadableModuleTest):
         import random
         for _ in range(10):
             segStatLogic.run(input_volume, output_volume, random.random())
-
+            output_array = slicer.util.arrayFromVolume(output_volume)
+            output_values = np.unique(output_array)
+            assert(list(output_values) == [0, 1])
+            
         self.delayDisplay('test_Threshold passed!')
